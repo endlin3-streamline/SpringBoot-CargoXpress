@@ -21,16 +21,6 @@ public class Shipment {
 
     private double totalCost;
     private String status; 
-    // e.g., "PENDING", "IN_TRANSIT", "DELIVERED"
-    // System.out.println("Normal Delivery :");
-    // System.out.println("1. On Process");
-    // System.out.println("3. In Transit");
-    // System.out.println("4. Delivered");
-    // System.out.println("---------------------------");
-    // System.out.println("Delivery Went Wrong : ");
-    // System.out.println("1. Bad Address");
-    // System.out.println("2. Misroute");
-    // System.out.println("3. returned");
     
     
     //timestamp

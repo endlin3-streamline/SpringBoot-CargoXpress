@@ -262,7 +262,12 @@ public class PersonController {
             return "customersignup.html"; 
         }
         @PostMapping(value={"/customersignup/register"}, params={"register"})
-        public String customerRegister(@ModelAttribute("customerInfo") Customer customerInfo){
+        public String customerRegister(@RequestParam("user") String user, @ModelAttribute("customerInfo") Customer customerInfo){
+        // Mengecek jika username sudah ada atau belum, sehingga tidak terjadi duplikasi
+        Person existing = personService.findByUsername(user);
+            if (existing != null) {
+                return "redirect:/customersignup?error=username_taken";
+            }
             customerService.addCustomer(customerInfo);
             return "redirect:../login";
         }
@@ -274,7 +279,12 @@ public class PersonController {
             return "couriersignup.html"; 
         }
         @PostMapping(value={"/couriersignup/register"}, params={"register"})
-        public String courierRegister(@ModelAttribute("courierInfo") Courier courierInfo){
+        public String courierRegister(@RequestParam("user") String user, @ModelAttribute("courierInfo") Courier courierInfo){
+        // Mengecek jika username sudah ada atau belum, sehingga tidak terjadi duplikasi
+        Person existing = personService.findByUsername(user);
+            if (existing != null) {
+                return "redirect:/couriersignup?error=username_taken";
+            }
             courierService.addCourier(courierInfo);
             return "redirect:../login";
         }

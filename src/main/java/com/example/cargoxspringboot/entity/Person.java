@@ -1,5 +1,6 @@
 package com.example.cargoxspringboot.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +20,7 @@ public abstract class Person {
 
     @NotNull
     @Size(min = 4, max = 50, message = "Username minimal 4 karakter")
+    @Column(unique = true)
     private String user;
 
     @Size(min = 3, max = 50, message = "Password minimal 3 karakter")
