@@ -96,8 +96,7 @@
 
             <label for="user" class="form-label">Username</label>
             <input type="text" id="user" name="user" required class="input-field" autocomplete="off"/>
-            <span id="userError" class="error-msg">Username ini sudah digunakan!</span>
-            <span id="userSuccess" class="success-msg">Username tersedia.</span>
+            <span id="userError" class="error-msg">Username harus sama atau lebih dari 8 karakter.</span>
 
             <label for="email" class="form-label">Email</label>
             <input type="email" id="email" name="email" required class="input-field"/>
@@ -182,7 +181,7 @@
 
         function checkGlobalValidity() {
             const userVal = userInput.value;
-            isUserValid = userVal.length >= 3; 
+            isUserValid = userVal.length >= 8; 
 
             if (isUserValid && isEmailValid && isPassValid && isMatchValid) {
                 submitBtn.removeAttribute('disabled');
@@ -192,6 +191,17 @@
                 submitBtn.style.cursor = 'not-allowed';
             }
         }
+
+        userInput.addEventListener('input', function() {
+            if (this.value.length < 8) { 
+                userError.style.display = 'block'; 
+                isUserValid = false; 
+            } else { 
+                userError.style.display = 'none'; 
+                isUserValid = true; 
+            }
+            checkGlobalValidity();
+        });
 
         userInput.addEventListener('input', checkGlobalValidity); 
 

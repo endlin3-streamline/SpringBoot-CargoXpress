@@ -19,7 +19,7 @@ public abstract class Person {
     private Long id;
 
     @NotNull
-    @Size(min = 4, max = 50, message = "Username minimal 4 karakter")
+    @Size(min = 8, max = 50, message = "Username minimal 8 karakter")
     @Column(unique = true)
     private String user;
 
