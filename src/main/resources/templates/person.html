@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person List | CargoXpress</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}" />
+
+    <style>
+        /* OVERRIDE CSS AGAR TABEL DI TENGAH */
+        
+        /* 1. Ubah Container jadi 1 Kolom & Rata Tengah */
+        .admin-container {
+            display: flex;
+            justify-content: center; 
+            align-items: flex-start;
+            width: 100%;
+            max-width: 100%;        
+            margin: 0;
+            padding-top: 50px;
+        }
+
+        /* 2. Atur Lebar Box Tabel */
+        .admin-box {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .admin-box h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="dashboard/admin" class="btn-text hover-underline" style="margin-bottom: -10px;">< Go Back</a>
+
+    <main class="admin-container">
+        
+        <div class="admin-box">
+            <h2 class="headline-2">Person List</h2>
+            
+            <div th:if="${#lists.isEmpty(personList)}" style="text-align: center; padding: 20px; color: #aaa;">
+                <p>Tidak ada data user ditemukan.</p>
+            </div>
+
+            <table class="styled-table" th:unless="${#lists.isEmpty(personList)}">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">No</th>
+                        <th>User</th>
+                        <th>Pass</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                    </tr> 
+                </thead>
+                <tbody th:each="d, no : ${personList}">
+                    <tr>
+                        <td th:text="${no.count}" style="text-align: center;"></td>
+                        <td th:text="${d.user}"></td>
+                        <td th:text="${d.pass}"></td>
+                        <td th:text="${d.name}"></td>
+                        <td th:text="${d.phone}"></td>
+                        <td th:text="${d.email}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
+    </main> 
+    <div class="admin-nav">
+        <a href="customer" class="btn-text hover-underline">Customer List</a>
+        <a href="#" class="btn-text hover-underline active" style="color: var(--white);">Person List</a>
+        <a href="courier" class="btn-text hover-underline">Courier List</a>
+    </div>
+    </body>
+</html>

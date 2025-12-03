@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Jobs | CargoXpress Courier</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/entity.css}" /> 
+</head>
+<body>
+
+    <nav class="dashboard-nav" style="background: #222; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;">
+        <a href="#" class="logo">
+            <img th:src="@{/images/logo.png}" width="140" height="45" alt="CargoXpress" class="img-cover">
+        </a>
+        <div class="nav-profile">
+            <span style="color: white; margin-right: 15px;">Courier Panel</span>
+            <a th:href="@{/logout}" class="logout-btn" style="color: var(--gold-crayola); border: 1px solid var(--gold-crayola); padding: 5px 15px; border-radius: 5px; text-decoration: none;">Logout</a>
+        </div>
+    </nav>
+
+    <main class="admin-container" style="padding-top: 50px;">
+        <div class="admin-box">
+            <h2 class="headline-2 text-center">Available Jobs (Pending Pickup)</h2>
+            
+            <div th:if="${#lists.isEmpty(jobList)}" style="text-align: center; padding: 20px;">
+                <p>No pending jobs available right now. Great work!</p>
+            </div>
+
+            <table class="styled-table" th:unless="${#lists.isEmpty(jobList)}">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Package Details</th>
+                        <th>Pick-up Location</th>
+                        <th>Drop-off Location</th>
+                        <th>Action</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    <tr th:each="job : ${jobList}">
+                        <td th:text="'#' + ${job.id}"></td>
+                        
+                        <td>
+                            <b th:text="${job.objPackages.pkgName}"></b><br>
+                            <small th:text="${job.objPackages.weightKg} + ' kg'"></small>
+                        </td>
+                        
+                        <td th:text="${job.objRoute.origin}"></td>
+                        
+                        <td th:text="${job.objRoute.destination}"></td>
+                        
+                        <td>
+                            <form th:action="@{/courier/accept/{id}(id=${job.id})}" method="post">
+                                <button type="submit" class="btn btn-secondary" style="padding: 8px 15px; font-size: 0.9rem;">
+                                    Accept Job
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</body>
+</html>

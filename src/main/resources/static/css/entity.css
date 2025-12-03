@@ -1,0 +1,152 @@
+/* courier.css - Styles for Courier Dashboard & Jobs */
+
+/* --- 1. VARIABLES & GLOBAL --- */
+:root {
+    --gold-crayola: #ff8000;
+    --smoky-black-1: #121212;
+    --smoky-black-2: #1e1e1e;
+    --smoky-black-3: #2a2a2a;
+    --quick-silver: #a0a0a0;
+    --white: #ffffff;
+    --radius-24: 24px;
+    --shadow-1: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+body {
+    background-color: var(--smoky-black-1);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    /* Center Layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- 2. NAVBAR --- */
+.dashboard-nav {
+    width: 100%;
+    background-color: var(--smoky-black-2);
+    padding: 20px 5%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    top: 0;
+    z-index: 100;
+}
+
+.nav-profile {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--quick-silver);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Logout Button */
+.logout-btn {
+    color: var(--gold-crayola);
+    border: 1px solid var(--gold-crayola);
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.logout-btn:hover {
+    background-color: var(--gold-crayola);
+    color: #000;
+}
+
+/* --- 3. MAIN CONTAINER --- */
+.admin-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.admin-box {
+    background-color: var(--smoky-black-2);
+    padding: 40px;
+    border-radius: var(--radius-24);
+    box-shadow: var(--shadow-1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.headline-2 {
+    font-family: 'Forum', serif;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: var(--white);
+}
+
+.text-center { text-align: center; }
+
+/* --- 4. STYLED TABLE --- */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+
+.styled-table thead tr {
+    background-color: var(--gold-crayola);
+    color: #000;
+    text-align: left;
+    font-weight: bold;
+}
+
+.styled-table th, 
+.styled-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.styled-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.styled-table tbody tr:hover {
+    background-color: var(--smoky-black-3);
+}
+
+/* Typography inside table */
+.styled-table b {
+    color: var(--white);
+    font-size: 1.1rem;
+}
+
+.styled-table small {
+    color: var(--quick-silver);
+    font-size: 0.9rem;
+}
+
+/* --- 5. BUTTONS --- */
+.btn {
+    display: inline-block;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary {
+    background-color: var(--gold-crayola);
+    color: #000;
+}
+
+.btn-secondary:hover {
+    background-color: #ff9933; /* Lighter Orange */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 128, 0, 0.3);
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+    
+    <title>Login now</title>
+</head>
+<body>
+    <div class="login-box">
+        <a href="#" class="logo">
+        <img src="images/logo.png" width="160" height="50" alt="CargoXpress - Home" class="login-logo">
+        </a>
+        
+        <h2 class="headline-2 text-center">Log In</h2>
+        <form th:action="@{/validateLogin}" method="post" class="form-group" enctype="multipart/form-data">
+            <label for="kode" class="form-label">ID</label>
+            <input type="text" id="kode" name="user" required class="input-field"/>
+            
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password" class="input-field"/>
+
+            <button type="submit" class="btn btn-secondary btn-full-width" name="Login">
+                <span class="text text-1">Login</span>
+                <span class="text text-2" aria-hidden="true">Login</span>
+            </button>
+        </form>
+    </div>
+
+    <script th:src="@{/js/pass.js}"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Order | CargoXpress</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+    
+    <style>
+        body {
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+        .login-box {
+            max-width: 600px;
+        }
+        .dimension-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        h3 {
+            color: var(--gold-crayola);
+            font-family: var(--fontFamily-dm_sans);
+            font-size: 1.4rem;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--white-alpha-10);
+            padding-bottom: 10px;
+        }
+        
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        
+        .unit-text {
+            position: absolute;
+            right: 15px;
+            top: 14px; 
+            color: var(--quick-silver);
+            font-weight: bold;
+            pointer-events: none;
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper input {
+            padding-right: 40px;
+        }
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <a href="#" class="logo">
+            <img th:src="@{/images/logo.png}" width="160" height="50" alt="CargoXpress" class="login-logo">
+        </a>
+
+        <h2 class="headline-2 text-center">Buat Shipment Baru</h2>
+        
+        <form th:action="@{/shipments/submit}" method="post" class="form-group">
+            
+            <h3>Detail Barang</h3>
+            
+            <label class="form-label">Nama Barang</label>
+            <input type="text" name="pkgName" class="input-field" required>
+            
+            <label class="form-label">Berat</label>
+            <div class="input-wrapper">
+                <input type="number" name="weight" class="input-field" placeholder="0" step="0.1" required>
+                <span class="unit-text">kg</span>
+            </div>
+            
+            <label class="form-label">Dimensi</label>
+            <div class="dimension-grid">
+                <div class="input-wrapper">
+                    <input type="number" name="length" class="input-field" placeholder="Panjang">
+                    <span class="unit-text">cm</span>
+                </div>
+                <div class="input-wrapper">
+                    <input type="number" name="width" class="input-field" placeholder="Lebar">
+                    <span class="unit-text">cm</span>
+                </div>
+                <div class="input-wrapper">
+                    <input type="number" name="height" class="input-field" placeholder="Tinggi">
+                    <span class="unit-text">cm</span>
+                </div>
+            </div>
+
+            <label class="form-label">Harga Satuan</label>
+            <div class="input-wrapper">
+                <input type="number" name="cost" class="input-field" placeholder="0" step="0.1" required>
+                <span class="unit-text">Rp</span>
+            </div>
+
+            <h3>Detail Rute</h3>
+            
+            <label class="form-label">Asal</label>
+            <input type="text" name="origin" class="input-field" required>
+            
+            <label class="form-label">Tujuan</label>
+            <input type="text" name="destination" class="input-field" required>
+            
+            <button type="submit" class="btn btn-secondary btn-full-width" style="margin-top: 30px;">
+                <span class="text text-1">Buat Orderan</span>
+                <span class="text text-2" aria-hidden="true">Buat Orderan</span>
+            </button>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a th:href="@{/dashboard/customer}" style="color: var(--quick-silver); text-decoration: none; font-size: 1.4rem;">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>

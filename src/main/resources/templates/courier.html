@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COURIER | CargoXpress</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}" />
+    <script th:src="@{/js/pass.js}"></script>
+</head>
+<body>
+
+    <a href="dashboard/admin" class="btn-text hover-underline" style="margin-bottom: 30px;">< Go Back</a>
+    
+    <main class="admin-container">
+
+        <div class="admin-box">
+            <h2 class="headline-2 text-center">Courier List</h2>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>User</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Employee ID</th>
+                        <th>Service Status</th>
+                    </tr>
+                </thead>
+                <tbody th:each="d, no : ${courierList}">
+                    <tr>
+                        <td th:text="${no.count}"></td>
+                        <td><a th:href="@{/courier/{id}(id=${d.id})}" th:text="${d.user}"></a></td>
+                        <td th:text="${d.name}"></td>
+                        <td th:text="${d.phone}"></td>
+                        <td th:text="${d.email}"></td>
+                        <td th:text="${d.employeeId}"></td>
+                        <td th:text="${d.serviceStatus}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin-box">
+            <h2 class="headline-2 text-center">Form Management</h2>
+            
+            <form th:action="${courierRec != null} ? @{/courier/submit/{id}(id=${courierRec.id})} : @{/courier/submit}" 
+                method="post" th:object="${courierInfo}" class="form-group">
+
+                <label for="id" class="form-label">ID</label>
+                <input type="number" id = "id" name = "id"
+                    th:value="${courierRec != null} ? ${courierRec.id}: '0'"
+                    readonly class="input-field" />
+
+                <label for="user" class="form-label">User</label>
+                <input type="text" id="user" name="user"
+                        th:value="${courierRec?.user}" required class="input-field" />
+
+                <label for="pass" class="form-label">Password</label>
+                <input type="password" id="pass" name="pass"
+                        th:value="${courierRec?.pass}" required class="input-field" />
+                
+                <label for="name" class="form-label">Name</label>
+                <input type="text" id="name" name="name"
+                        th:value="${courierRec?.name}" required class="input-field" />
+                
+                <label for="phone" class="form-label">Phone</label>
+                <input type="text" id="phone" name="phone"
+                        th:value="${courierRec?.phone}" class="input-field" />
+
+                <label for="email" class="form-label">Email</label>
+                <input type="text" id="email" name="email"
+                        th:value="${courierRec?.email}" class="input-field" />
+                
+                <label for="employeeId" class="form-label">Employee ID</label>
+                <input type="text" id="employeeId" name="employeeId"
+                        th:value="${courierRec?.employeeId}" required class="input-field" />
+                
+                <label for="serviceStatus" class="form-label">Service Status</label>
+                <input type="text" id="serviceStatus" name="serviceStatus"
+                        th:value="${courierRec?.serviceStatus}" required class="input-field" />
+
+                <div class="form-button-group">
+                    <button type="submit" class="btn btn-secondary" name="add">
+                        <span class="text text-1">Add</span>
+                        <span class="text text-2" aria-hidden="true">Add</span>
+                    </button>
+                    <button type="submit" class="btn btn-secondary" name="edit">
+                        <span class="text text-1">Edit</span>
+                        <span class="text text-2" aria-hidden="true">Edit</span>
+                    </button>
+                    <button type="submit" class="btn btn-secondary" name="delete">
+                        <span class="text text-1">Delete</span>
+                        <span class="text text-2" aria-hidden="true">Delete</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div class="admin-nav">
+        <a href="customer" class="btn-text hover-underline">Customer List</a>
+        <a href="person" class="btn-text hover-underline">Person List</a>
+        <a href="#" class="btn-text hover-underline active" style="color: var(--white);">Courier List</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dashboards.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/entity.css}" />
+    
+    <title>Admin Dashboard | CargoXpress</title>
+</head>
+<body>
+
+    <nav class="dashboard-nav">
+        <a href="#" class="logo">
+            <img th:src="@{/images/logo.png}" width="140" height="45" alt="CargoXpress" class="img-cover">
+        </a>
+        <div class="nav-profile">
+            <span>Selamat Datang, Admin!</span>
+            <a th:href="@{/logout}" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="page-title">
+        <h2>Admin Control Panel</h2>
+        <p>Kelola semua data master dan operasional dari sini.</p>
+    </div>
+
+    <div class="menu-grid" style="margin-bottom: 100px;">
+        
+        <a th:href="@{/person}" class="menu-card">
+            <ion-icon name="id-card-outline"></ion-icon>
+            <h3>Person Data</h3>
+            <p>Kelola data pengguna umum dan administrator sistem.</p>
+        </a>
+
+        <a th:href="@{/customer}" class="menu-card">
+            <ion-icon name="people-outline"></ion-icon>
+            <h3>Customer List</h3>
+            <p>Lihat dan kelola data pelanggan yang terdaftar.</p>
+        </a>
+
+        <a th:href="@{/courier}" class="menu-card">
+            <ion-icon name="bicycle-outline"></ion-icon>
+            <h3>Courier List</h3>
+            <p>Manajemen data kurir, ID karyawan, dan status aktif.</p>
+        </a>
+
+        <a th:href="@{/packages}" class="menu-card">
+            <ion-icon name="cube-outline"></ion-icon>
+            <h3>Packages</h3>
+            <p>Monitoring data barang dan spesifikasi paket.</p>
+        </a>
+
+        <a th:href="@{/route}" class="menu-card">
+            <ion-icon name="map-outline"></ion-icon>
+            <h3>Route & Location</h3>
+            <p>Kelola rute pengiriman, jarak, dan estimasi harga.</p>
+        </a>
+
+        <a th:href="@{/shipment}" class="menu-card">
+            <ion-icon name="rocket-outline"></ion-icon>
+            <h3>Shipment Status</h3>
+            <p>Lacak status pengiriman yang sedang berlangsung.</p>
+        </a>
+
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Shipment History | CargoXpress</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}" /> 
+    
+    <style>
+        /* --- LAYOUT FIX: TENGAH --- */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Pusatkan semua secara horizontal */
+            min-height: 100vh;
+            margin: 0;
+            background-color: #121212; /* Pastikan background gelap */
+        }
+
+        /* Navbar harus tetap Full Width (100%) */
+        .dashboard-nav {
+            width: 100%; 
+            background: #1e1e1e; 
+            padding: 15px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #333;
+            box-sizing: border-box; /* Agar padding tidak menambah lebar */
+        }
+
+        /* Container Utama di Tengah */
+        .admin-container {
+            width: 100%;
+            max-width: 1200px; /* Batas lebar maksimal agar tabel enak dilihat */
+            padding: 50px 20px;
+            display: flex;
+            justify-content: center; /* Pusatkan Admin Box */
+        }
+
+        .admin-box {
+            width: 100%; /* Mengisi container */
+            background-color: #1e1e1e;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* --- CSS PEMBAYARAN --- */
+        .payment-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2a2a2a; 
+            padding: 25px 40px;
+            margin-top: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .total-label {
+            font-size: 1.2rem;
+            color: var(--quick-silver);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .total-amount {
+            font-family: 'Forum', serif;
+            font-size: 2.5rem;
+            color: var(--gold-crayola);
+            font-weight: bold;
+            margin-left: 15px;
+        }
+
+        .btn-pay {
+            background-color: var(--gold-crayola);
+            color: #000;
+            border: none;
+            padding: 12px 35px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-pay:hover {
+            background-color: #ff9933;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 128, 0, 0.4);
+        }
+        
+        .cost-column {
+            text-align: right;
+            font-weight: bold;
+            color: var(--white);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="dashboard-nav">
+        <a href="#" class="logo">
+            <img th:src="@{/images/logo.png}" width="140" height="45" alt="CargoXpress" class="img-cover">
+        </a>
+        <div class="nav-profile">
+            <a th:href="@{/dashboard/customer}" style="color: white; text-decoration: none; margin-right: 20px;">Back to Dashboard</a>
+            <a th:href="@{/logout}" class="logout-btn" style="color: var(--gold-crayola); border: 1px solid var(--gold-crayola); padding: 5px 15px; border-radius: 5px; text-decoration: none;">Logout</a>
+        </div>
+    </nav>
+
+    <main class="admin-container">
+        <div class="admin-box">
+            <h2 class="headline-2 text-center">My Shipment History</h2>
+            
+            <div th:if="${#lists.isEmpty(shipmentList)}" style="text-align: center; padding: 20px;">
+                <p>You haven't placed any orders yet.</p>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(shipmentList)}">
+                <table class="styled-table" id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Tracking ID</th>
+                            <th>Item Name</th>
+                            <th>Route</th>
+                            <th>Weight</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th style="text-align: right;">Total Cost (+ Ongkos)</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        <tr th:each="s : ${shipmentList}">
+                            <td th:text="'#' + ${s.id}"></td>
+                            
+                            <td th:text="${s.objPackages.pkgName}"></td>
+                            
+                            <td>
+                                <span th:text="${s.objRoute.origin}"></span>
+                                &rarr; 
+                                <span th:text="${s.objRoute.destination}"></span>
+                            </td>
+                            
+                            <td th:text="${s.objPackages.weightKg} + ' kg'"></td>
+                            
+                            <td style="font-weight: bold;">
+                                <span th:if="${s.status == 'PENDING'}" style="color: rgb(255, 246, 71);">PENDING</span>
+                                <span th:if="${s.status == 'ACCEPTED'}" style="color: rgb(80, 234, 56);">ACCEPTED</span>
+                                <span th:if="${s.status == 'IN TRANSIT'}" style="color: #2772ff;">IN TRANSIT</span>
+                                <span th:if="${s.status == 'DELIVERED'}" style="color: rgb(255, 170, 0);">DELIVERED</span>
+
+                                <span th:if="${s.status == 'BAD ADDRESS'}" style="color: rgb(255, 25, 25);">BAD ADDRESS</span>
+                                <span th:if="${s.status == 'MISROUTE'}" style="color: rgb(255, 25, 25);">MISROUTE</span>
+                                <span th:if="${s.status == 'RETURNED'}" style="color: rgb(135, 135, 135);">RETURNED</span>
+                            </td>
+
+                            <td th:text="${#temporals.format(s.createdDate, 'dd-MM-yyyy HH:mm')}"></td>
+                            
+                            <td class="cost-column" 
+                                th:data-val="${s.totalCost != null ? s.totalCost : 0}" 
+                                th:text="'Rp ' + ${#numbers.formatDecimal(s.totalCost != null ? s.totalCost : 0, 0, 'COMMA', 0, 'POINT')}">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="payment-footer">
+                    <div>
+                        <span class="total-label">Total Pembayaran:</span>
+                        <span class="total-amount" id="grandTotal">Rp 0</span>
+                    </div>
+                    <button type="button" class="btn-pay" onclick="processPayment()">Bayar Sekarang</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // 1. Fungsi Hitung Total
+        window.onload = function() {
+            let total = 0;
+            const costCells = document.querySelectorAll('.cost-column');
+            
+            costCells.forEach(cell => {
+                const value = parseFloat(cell.getAttribute('data-val'));
+                if (!isNaN(value)) {
+                    total += value;
+                }
+            });
+
+            const formattedTotal = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(total);
+
+            const totalElement = document.getElementById('grandTotal');
+            if(totalElement) {
+                totalElement.innerText = formattedTotal;
+            }
+        };
+
+        // 2. Fungsi Bayar
+        function processPayment() {
+            alert("Pembayaran berhasil! \nTerima kasih telah menggunakan CargoXpress.");
+        }
+    </script>
+
+</body>
+</html>

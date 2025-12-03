@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+    
+    <title>Customer Sign Up | CargoXpress</title>
+
+    <style>
+        textarea.input-field {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .error-msg {
+            color: #ff4d4d; 
+            font-size: 1.2rem;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            display: none;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: bold;
+        }
+        
+        .success-msg {
+            color: #00b894; 
+            font-size: 1.2rem;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            display: none;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: bold;
+        }
+
+        button:disabled {
+            background-color: #555 !important;
+            border-color: #555 !important;
+            color: #888 !important;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        /* CSS TOGGLE PASSWORD (MATA) */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .toggle-password-btn {
+            position: absolute;
+            right: 15px;
+            top: 18px; /* Posisi Vertikal */
+            background: none;
+            border: none;
+            color: var(--quick-silver);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+            z-index: 2;
+        }
+
+        .toggle-password-btn:hover {
+            color: var(--gold-crayola);
+        }
+
+        /* Padding Kanan Input agar Teks tidak Nabrak Ikon */
+        input[type="password"], input[type="text"].password-field {
+            padding-right: 45px;
+        }
+
+        body {
+            padding-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box" style="margin-top: 50px;">
+        <a href="#" class="logo">
+            <img th:src="@{/images/logo.png}" width="160" height="50" alt="CargoXpress - Home" class="login-logo">
+        </a>
+        
+        <h2 class="headline-2 text-center">Customer Sign Up</h2>
+        
+        <form th:action="@{/customersignup/register}" method="post" class="form-group" id="signupForm">
+            
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" id="name" name="name" required class="input-field"/>
+
+            <label for="user" class="form-label">Username</label>
+            <input type="text" id="user" name="user" required class="input-field" autocomplete="off"/>
+            <span id="userError" class="error-msg">Username ini sudah digunakan!</span>
+            <span id="userSuccess" class="success-msg">Username tersedia.</span>
+
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="email" required class="input-field"/>
+            <span id="emailError" class="error-msg">Format email tidak valid (harus ada @ dan domain).</span>
+
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="text" id="phone" name="phone" required class="input-field"/>
+
+            <label for="address" class="form-label">Delivery Address</label>
+            <textarea id="address" name="address" required class="input-field"></textarea>
+
+            <label for="password" class="form-label">Password</label>
+            <div class="password-wrapper">
+                <input type="password" id="password" name="pass" required class="input-field password-field"/>
+                <button type="button" class="toggle-password-btn" onclick="togglePassword('password', 'icon-pass')">
+                    <ion-icon name="eye-outline" id="icon-pass"></ion-icon>
+                </button>
+            </div>
+            <span id="passError" class="error-msg">
+                Password harus minimal 8 karakter, mengandung angka, dan karakter unik (@#$%^&).
+            </span>
+
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <div class="password-wrapper">
+                <input type="password" id="confirmPassword" name="confirmPassword" required class="input-field password-field"/>
+                <button type="button" class="toggle-password-btn" onclick="togglePassword('confirmPassword', 'icon-confirm')">
+                    <ion-icon name="eye-outline" id="icon-confirm"></ion-icon>
+                </button>
+            </div>
+            <span id="matchError" class="error-msg">Password tidak cocok!</span>
+
+            <button type="submit" id="submitBtn" name="register" class="btn btn-secondary btn-full-width" disabled>
+                <span class="text text-1">Buat Akun</span>
+                <span class="text text-2" aria-hidden="true">Buat Akun</span>
+            </button>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <p class="form-label" style="display: inline; font-size: 1.4rem; text-transform: none; color: var(--quick-silver);">
+                    Sudah punya akun?
+                </p>
+                <a th:href="@{/login}" style="color: var(--gold-crayola); font-weight: bold; display: inline-block; margin-left: 5px;">
+                    Login
+                </a>
+            </div>
+
+        </form>
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.setAttribute("name", "eye-off-outline");
+            } else {
+                input.type = "password";
+                icon.setAttribute("name", "eye-outline");
+            }
+        }
+
+        const userInput = document.getElementById('user');
+        const emailInput = document.getElementById('email'); 
+        const passInput = document.getElementById('password');
+        const confirmInput = document.getElementById('confirmPassword');
+        const submitBtn = document.getElementById('submitBtn');
+
+        const userError = document.getElementById('userError');
+        const userSuccess = document.getElementById('userSuccess');
+        const emailError = document.getElementById('emailError');
+        const passError = document.getElementById('passError');
+        const matchError = document.getElementById('matchError');
+
+        let isUserValid = false;
+        let isEmailValid = false;
+        let isPassValid = false;
+        let isMatchValid = false;
+
+        function checkGlobalValidity() {
+            const userVal = userInput.value;
+            isUserValid = userVal.length >= 3; 
+
+            if (isUserValid && isEmailValid && isPassValid && isMatchValid) {
+                submitBtn.removeAttribute('disabled');
+                submitBtn.style.cursor = 'pointer';
+            } else {
+                submitBtn.setAttribute('disabled', 'true');
+                submitBtn.style.cursor = 'not-allowed';
+            }
+        }
+
+        userInput.addEventListener('input', checkGlobalValidity); 
+
+        emailInput.addEventListener('input', function() {
+            const val = this.value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if(emailRegex.test(val)) {
+                emailError.style.display = 'none';
+                isEmailValid = true;
+            } else {
+                emailError.style.display = 'block';
+                isEmailValid = false;
+            }
+            checkGlobalValidity();
+        });
+
+        passInput.addEventListener('input', function() {
+            const val = this.value;
+            const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/;
+
+            if(regex.test(val)) {
+                passError.style.display = 'none';
+                isPassValid = true;
+            } else {
+                passError.style.display = 'block';
+                isPassValid = false;
+            }
+            
+            if(confirmInput.value !== "") {
+                checkMatch();
+            }
+            checkGlobalValidity();
+        });
+
+        function checkMatch() {
+            if(confirmInput.value === passInput.value && confirmInput.value !== "") {
+                matchError.style.display = 'none';
+                isMatchValid = true;
+            } else {
+                matchError.style.display = 'block';
+                isMatchValid = false;
+            }
+            checkGlobalValidity();
+        }
+
+        confirmInput.addEventListener('input', checkMatch);
+
+    </script>
+</body>
+</html>

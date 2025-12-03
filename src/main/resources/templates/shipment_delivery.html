@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Delivery | CargoXpress</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}" />
+    
+    <style>
+        /* Sedikit penyesuaian untuk readonly input agar terlihat redup */
+        input[readonly] {
+            background-color: #2a2a2a;
+            color: #888;
+            cursor: not-allowed;
+            border: 1px solid #444;
+        }
+        
+        /* Warna status di tabel */
+        .status-badge {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="dashboard-nav" style="background: #1e1e1e; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <a href="#" class="logo">
+            <img th:src="@{/images/logo.png}" width="140" height="45" alt="CargoXpress" class="img-cover">
+        </a>
+        <div class="nav-profile">
+            <a th:href="@{/dashboard/courier}" style="color: #aaa; text-decoration: none; margin-right: 20px;">Back to Dashboard</a>
+            <a th:href="@{/logout}" style="color: var(--gold-crayola); border: 1px solid var(--gold-crayola); padding: 5px 15px; border-radius: 5px; text-decoration: none;">Logout</a>
+        </div>
+    </nav>
+
+    <main class="admin-container" style="padding-top: 40px;">
+        
+        <div class="admin-box">
+            <h2 class="headline-2 text-center">My Active Deliveries</h2>
+            
+            <div th:if="${#lists.isEmpty(myShipmentList)}" style="text-align: center; padding: 20px; color: #aaa;">
+                <p>Anda tidak memiliki paket aktif saat ini.</p>
+            </div>
+
+            <table class="styled-table" th:unless="${#lists.isEmpty(myShipmentList)}">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Package</th>
+                        <th>Destination</th>
+                        <th>Current Status</th>
+                        <th>Action</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    <tr th:each="s : ${myShipmentList}">
+                        <td th:text="'#' + ${s.id}"></td>
+                        
+                        <td th:text="${s.objPackages != null} ? ${s.objPackages.pkgName} : '-'"></td>
+                        
+                        <td th:text="${s.objRoute != null} ? ${s.objRoute.destination} : '-'"></td>
+                        
+                        <td>
+                            <span th:if="${s.status == 'ACCEPTED'}" style="color: rgb(80, 234, 56);">ACCEPTED</span>
+                            <span th:if="${s.status == 'IN TRANSIT'}" style="color: #2772ff;">IN TRANSIT</span>
+                            <span th:if="${s.status == 'DELIVERED'}" style="color: rgb(255, 170, 0);">DELIVERED</span>
+
+                            <span th:if="${s.status == 'BAD ADDRESS'}" style="color: rgb(255, 25, 25);">BAD ADDRESS</span>
+                            <span th:if="${s.status == 'MISROUTE'}" style="color: rgb(255, 25, 25);">MISROUTE</span>
+                            <span th:if="${s.status == 'RETURNED'}" style="color: rgb(135, 135, 135);">RETURNED</span>
+
+                            <span th:unless="${s.status == 'ACCEPTED' or s.status == 'IN TRANSIT' or s.status == 'DELIVERED' or
+                                                s.status == 'BAD ADDRESS' or s.status == 'MISROUTE' or s.status == 'RETURNED'}" 
+                                                th:text="${s.status}"></span>
+                        </td>
+
+                        <td>
+                            <a th:href="@{/courier/my-deliveries/{id}(id=${s.id})}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.8rem; text-decoration: none; color: black;">
+                                Update
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="admin-box">
+            <h2 class="headline-2 text-center">Update Status</h2>
+            
+            <div th:if="${shipmentRec == null}" style="text-align: center; padding: 50px; color: #aaa;">
+                <p>Select a package from the table to update its status.</p>
+            </div>
+
+            <form th:if="${shipmentRec != null}" th:action="@{/courier/update/submit}" method="post" class="form-group">
+                
+                <input type="hidden" name="id" th:value="${shipmentRec.id}">
+
+                <label for="id" class="form-label">Tracking ID</label>
+                <input type="text" id="id" name="id_display"
+                    th:value="${shipmentRec.id}"
+                    readonly class="input-field" />
+
+                <label class="form-label">Package Item</label>
+                <input type="text" 
+                    th:value="${shipmentRec.objPackages?.pkgName}" 
+                    readonly class="input-field" />
+
+                <label class="form-label">Destination</label>
+                <input type="text" 
+                    th:value="${shipmentRec.objRoute?.destination}" 
+                    readonly class="input-field" />
+
+                <label for="status" class="form-label" style="color: var(--gold-crayola);">Current Status</label>
+                <select id="status" name="status" class="input-field" style="border: 1px solid var(--gold-crayola);">
+                    <optgroup label="Normal Flow">
+                        <option value="ACCEPTED" th:selected="${shipmentRec.status == 'ACCEPTED'}">ACCEPTED (Barang Diterima)</option>
+                        <option value="IN TRANSIT" th:selected="${shipmentRec.status == 'IN TRANSIT'}">IN TRANSIT (Dalam Perjalanan)</option>
+                        <option value="DELIVERED" th:selected="${shipmentRec.status == 'DELIVERED'}">DELIVERED (Sampai Tujuan)</option>
+                    </optgroup>
+                    
+                    <optgroup label="Issues / Masalah">
+                        <option value="BAD ADDRESS" th:selected="${shipmentRec.status == 'BAD ADDRESS'}">BAD ADDRESS (Alamat Salah)</option>
+                        <option value="MISROUTE" th:selected="${shipmentRec.status == 'MISROUTE'}">MISROUTE (Salah Jalur)</option>
+                        <option value="RETURNED" th:selected="${shipmentRec.status == 'RETURNED'}">RETURNED (Barang Dikembalikan)</option>
+                    </optgroup>
+
+                </select>
+
+                <div class="form-button-group">
+                    <button type="submit" class="btn btn-secondary" style="width: 100%;">
+                        <span class="text text-1">Update Status</span>
+                        <span class="text text-2" aria-hidden="true">Update Status</span>
+                    </button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 15px;">
+                    <a th:href="@{/courier/my-deliveries}" style="color: #aaa; text-decoration: none;">Cancel Selection</a>
+                </div>
+
+            </form>
+        </div>
+    
+    </main> 
+
+</body>
+</html>

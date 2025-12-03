@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+    
+    <title>Courier Sign Up | CargoXpress</title>
+
+    <style>
+        /* Style Validasi Message */
+        .error-msg {
+            color: #ff4d4d; 
+            font-size: 0.9rem;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            display: none;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: bold;
+        }
+        
+        .success-msg {
+            color: #00b894; 
+            font-size: 0.9rem;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            display: none;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: bold;
+        }
+
+        /* Tombol Disabled */
+        button:disabled {
+            background-color: #555 !important;
+            border-color: #555 !important;
+            color: #888 !important;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Dropdown Style */
+        select.input-field {
+            background-color: transparent;
+            color: white;
+            cursor: pointer;
+        }
+        select.input-field option {
+            background-color: #1e1e1e; /* Warna gelap dropdown */
+            color: white;
+        }
+
+        /* --- CSS FITUR LIHAT PASSWORD --- */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .toggle-password-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%); /* Posisi tengah vertikal */
+            background: none;
+            border: none;
+            color: var(--quick-silver);
+            cursor: pointer;
+            font-size: 1.3rem;
+            padding: 5px;
+            z-index: 5;
+        }
+
+        .toggle-password-btn:hover {
+            color: var(--gold-crayola);
+        }
+
+        /* Padding agar teks tidak nabrak ikon mata */
+        input[type="password"], input[type="text"].password-field {
+            padding-right: 45px;
+        }
+
+        body {
+            padding-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box" style="margin-top: 50px;">
+        <a href="#" class="logo">
+            <img th:src="@{/images/logo.png}" width="160" height="50" alt="CargoXpress - Home" class="login-logo">
+        </a>
+        
+        <h2 class="headline-2 text-center">Courier Sign Up</h2>
+        
+        <form th:action="@{/couriersignup/register}" method="post" class="form-group" id="courierForm">
+            
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" id="name" name="name" required class="input-field"/>
+
+            <label for="user" class="form-label">Username</label>
+            <input type="text" id="user" name="user" required class="input-field" autocomplete="off"/>
+            <span id="userError" class="error-msg">Username harus lebih dari 3 karakter.</span>
+
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="email" required class="input-field"/>
+            <span id="emailError" class="error-msg">Format email tidak valid.</span>
+
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="text" id="phone" name="phone" required class="input-field"/>
+
+            <label for="employeeId" class="form-label">Employee ID</label>
+            <input type="text" id="employeeId" name="employeeId" required class="input-field" autocomplete="off"/>
+            <span id="empError" class="error-msg">Employee ID wajib diisi.</span>
+
+            <label for="serviceStatus" class="form-label">Service Status</label>
+            <select id="serviceStatus" name="serviceStatus" class="input-field" required>
+                <option value="" disabled selected>-- Pilih Status --</option>
+                <option value="Sedang Aktif">Sedang Aktif</option>
+                <option value="Sedang Tidak Aktif">Sedang Tidak Aktif</option>
+            </select>
+
+            <label for="password" class="form-label">Password</label>
+            <div class="password-wrapper">
+                <input type="password" id="password" name="pass" required class="input-field password-field"/>
+                <button type="button" class="toggle-password-btn" onclick="togglePassword('password', 'icon-pass')">
+                    <ion-icon name="eye-outline" id="icon-pass"></ion-icon>
+                </button>
+            </div>
+            <span id="passError" class="error-msg">
+                Password harus minimal 8 karakter, mengandung angka, dan karakter unik (@#$%^&).
+            </span>
+
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <div class="password-wrapper">
+                <input type="password" id="confirmPassword" name="confirmPassword" required class="input-field password-field"/>
+                <button type="button" class="toggle-password-btn" onclick="togglePassword('confirmPassword', 'icon-confirm')">
+                    <ion-icon name="eye-outline" id="icon-confirm"></ion-icon>
+                </button>
+            </div>
+            <span id="matchError" class="error-msg">Password tidak cocok!</span>
+
+            <button type="submit" name="register" id="submitBtn" class="btn btn-secondary btn-full-width" style="margin-top: 20px;" disabled>
+                <span class="text text-1">Daftar Kurir</span>
+                <span class="text text-2" aria-hidden="true">Daftar Kurir</span>
+            </button>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <p class="form-label" style="display: inline; font-size: 1.4rem; text-transform: none; color: var(--quick-silver);">
+                    Sudah punya akun?
+                </p>
+                <a th:href="@{/login}" style="color: var(--gold-crayola); font-weight: bold; display: inline-block; margin-left: 5px;">
+                    Login
+                </a>
+            </div>
+
+        </form>
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.setAttribute("name", "eye-off-outline");
+            } else {
+                input.type = "password";
+                icon.setAttribute("name", "eye-outline");
+            }
+        }
+
+        const nameInput = document.getElementById('name');
+        const userInput = document.getElementById('user');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const empIdInput = document.getElementById('employeeId');
+        const statusSelect = document.getElementById('serviceStatus');
+        const passInput = document.getElementById('password');
+        const confirmInput = document.getElementById('confirmPassword');
+        const submitBtn = document.getElementById('submitBtn');
+
+        const userError = document.getElementById('userError');
+        const emailError = document.getElementById('emailError');
+        const empError = document.getElementById('empError');
+        const passError = document.getElementById('passError');
+        const matchError = document.getElementById('matchError');
+
+        let isUserValid = false;
+        let isEmailValid = false;
+        let isEmpIdValid = false;
+        let isPassValid = false;
+        let isMatchValid = false;
+
+        function checkGlobalValidity() {
+            const isNameFilled = nameInput.value.trim() !== "";
+            const isPhoneFilled = phoneInput.value.trim() !== "";
+            const isStatusSelected = statusSelect.value !== "";
+
+            if (isUserValid && isEmailValid && isEmpIdValid && isPassValid && isMatchValid && 
+                isNameFilled && isPhoneFilled && isStatusSelected) {
+                
+                submitBtn.removeAttribute('disabled');
+                submitBtn.style.cursor = 'pointer';
+                submitBtn.style.opacity = '1';
+            } else {
+                submitBtn.setAttribute('disabled', 'true');
+                submitBtn.style.cursor = 'not-allowed';
+                submitBtn.style.opacity = '0.7';
+            }
+        }
+
+        userInput.addEventListener('input', function() {
+            if (this.value.length < 3) { 
+                userError.style.display = 'block'; 
+                isUserValid = false; 
+            } else { 
+                userError.style.display = 'none'; 
+                isUserValid = true; 
+            }
+            checkGlobalValidity();
+        });
+
+        emailInput.addEventListener('input', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(emailRegex.test(this.value)) { 
+                emailError.style.display = 'none'; 
+                isEmailValid = true; 
+            } else { 
+                emailError.style.display = 'block'; 
+                isEmailValid = false; 
+            }
+            checkGlobalValidity();
+        });
+
+        empIdInput.addEventListener('input', function() {
+            if(this.value.length < 1) { 
+                empError.style.display = 'block'; 
+                isEmpIdValid = false; 
+            } else { 
+                empError.style.display = 'none'; 
+                isEmpIdValid = true; 
+            }
+            checkGlobalValidity();
+        });
+
+        passInput.addEventListener('input', function() {
+            const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/;
+            if(regex.test(this.value)) { 
+                passError.style.display = 'none'; 
+                isPassValid = true; 
+            } else { 
+                passError.style.display = 'block'; 
+                isPassValid = false; 
+            }
+            if(confirmInput.value !== "") checkMatch();
+            checkGlobalValidity();
+        });
+
+        function checkMatch() {
+            if(confirmInput.value === passInput.value && confirmInput.value !== "") { 
+                matchError.style.display = 'none'; 
+                isMatchValid = true; 
+            } else { 
+                matchError.style.display = 'block'; 
+                isMatchValid = false; 
+            }
+            checkGlobalValidity();
+        }
+        confirmInput.addEventListener('input', checkMatch);
+
+        nameInput.addEventListener('input', checkGlobalValidity);
+        phoneInput.addEventListener('input', checkGlobalValidity);
+        statusSelect.addEventListener('change', checkGlobalValidity);
+
+    </script>
+</body>
+</html>
